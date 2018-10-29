@@ -1,0 +1,25 @@
+---
+title: "ac4"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r pressure, echo=FALSE}
+library(ggmap)
+library(Rcpp)
+library(raster) 
+data(crime)
+```
+
+```{r pressure, echo=FALSE}
+houston <- get_map(location = "houston", zoom = 13) ##Get the houston map
+houstonMap <-ggmap(houston, extent = "device") 
+HoustonMap+geom_point(aes(x = lon, y = lat, colour = offense),
+              data = crime)+
+ggtitle("Map of Crime in Houston")
+```
+

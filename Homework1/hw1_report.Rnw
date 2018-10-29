@@ -1,0 +1,127 @@
+\documentclass{article}
+\usepackage{url}
+\usepackage{color}
+\usepackage{pdfcolmk}
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+\DefineVerbatimEnvironment{Sinput}{Verbatim}{formatcom = {\color[rgb]{0, 0, 0.56}}}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}{formatcom = {\color[rgb]{0.56, 0, 0}}}
+\graphicspath{{/Users/jacquelineroudes/Documents/GTL_courses/Data_Visual_Analytics}}
+\begin{titlepage}
+\vspace*{\stretch{1}}
+
+\begin{center}
+\includegraphics[scale=0.4]{GT_logo.jpeg}
+\end{center}
+\vspace*{\stretch{1}}
+\hrulefill
+\begin{center}\bfseries\huge
+   HW1 Report \\
+    R Programming\\
+    \hrulefill
+\end{center}
+\vspace*{1cm}
+\begin{minipage}[t]{0.4\textwidth}
+  \begin{flushleft} \large
+    \emph{Subject : \\
+    CSE 6242 Spring 2017 - OMS}\\
+  \end{flushleft}
+\end{minipage}
+\begin{minipage}[t]{0.6\textwidth}
+  \begin{flushright} \large
+    \emph{Author :} \\
+    Melisande Zonta Roudes \\
+    GT account name : mzr3 \\
+  \end{flushright}
+\end{minipage}
+\vspace*{\stretch{2}}
+\begin{flushright}
+       Le \today 
+\end{flushright} 
+
+\end{titlepage}
+
+\section{Get Familiar with R}
+
+  Matlab being one of my main programming language, R is quite reassuring thanks to some similarities concerning the syntax of mathematic tools or graphics ones. Indeed, R and Matlab are both mathematical languages. Moreover, Python has also some particular objects in common with R like lists. Many other possibilities make of R a really powerful tool for statistics and data analysis.
+
+In addition of some syntax particularities, what strikes me most in the R programming language is the power of dataframes. 
+ 
+Indeed, at first sight, this object has rows and columns as a matrix, however the big difference stands in the possibility to store various types of objects (mode character, mode numeric, mode logical...).
+ 
+While this kind of storage can be seen in the list which is is a special vector with elements of different modes including lists themselves, the list's content is not represented as an array. 
+ 
+The distinguishing feature between a dataframe and a list is the constraint in the first of having a similar length of elements which explains the organisation in columns. 
+
+So let's take an example of a ranking between countries which is a particularly convenient for dataframe. R has its own dataframes (mtcars, iris, diamonds) we used during these first lessons but we will elaborate one on our own. Datas were extracted from this document : \url{http://www.clesdusocial.com/IMG/pdf/europe-sociale-chiffres-classements.pdf}. This dataset analysis could show a link between the GDP of countries and Life Expectancy or between GDP and employment. Visualization would then play its role to make this induction.
+To create our data-frame, we must gather the elements of each category in a list and then call the R function data.frame().
+
+<<>>=
+Countries <- c("France","Germany","England","Italy","Luxembourg","Netherlands")
+GDP <- c(27.0,29.0,29.4,25.3,64.1,33.9)
+Employment <- c(65.2,70,71.5,58.7,90.0,77.2)
+Life.Expectancy.men <- c(77.5,77.4,77.3,78.5,76.7,78.1)
+ranking <- data.frame(Countries,GDP,Employment,Life.Expectancy.men)
+print(ranking)
+@
+
+We can build another one on the same pattern. The datas chosen gather only two modes : numeric and character, but we could have added in an other dimension some logical elements.
+<<>>=
+Countries <- c("France","Germany","England","Italy","Luxembourg","Netherlands")
+Life.Expectancy.women <- c(84.5,82.7,81.7,84.2,82.2,82.5)
+ranking2 <- data.frame(Countries,Life.Expectancy.women)
+print(ranking2)
+@
+
+One powerful function in R is the possibility of merging two data-frames horizontally with the merge() function. The example below merges ranking and ranking2 by all its key variables. It allows to add colums to our datasets as we can observe by calling the names() function.
+<<>>=
+ranking_global <- merge(ranking,ranking2)
+names(ranking_global)
+print(ranking_global)
+@
+
+There are different ways of accessing the array's values as we saw in Chapter 7. We can obtain a column with the symbol $\$$ followed by name of the category we want. By specifying the location of the cell as in a matrix, we can have its value. The function head() allows us to access to a selected number of rows. Last but not least, we can create subset among our dataframes by applying a condition on values which is really useful to filter our datas according to some caracteristics.
+
+<<>>=
+ranking_global$GDP
+ranking_global[1,2]
+head(ranking_global,2)
+subset(ranking_global,ranking_global$GDP > 30)
+@
+
+Finally, it would be a shame not to speak of the summary() function, which is in my mind the first call we should make to analyse a dataset. It provides an overview of the rows' and columns' names and above all indications on the values of these key variables (mean, max, min, median). It is really useful to detect outliers by comparing it with the mean.
+
+<<>>=
+summary(ranking_global)
+@
+
+\section{Log Gamma (Loop)}
+
+\section{Log Gamma (Recursive)}
+
+\section{Sum of Log Gamma}
+
+\section{Compare Results to Built-in R Function}
+
+After having implemented different methods for the sum of Log Gamma, it's time to compare their efficiency regarding running time. To have an element of reference, we will compute the sum of Log Gamma with the Built-in function lgamma(). This function has been implemented in hw1.r file. We use the system.time() function and store the first element which is the user time.
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=.8\textwidth]{Time_100_iterations.png}
+ \caption{Comparison between the 3 function over 1000 iterations}
+\label{courbe1}
+\end{figure}
+
+We can observe on figure~\ref{courbe1} that recursive method consumes three times more than loop method. However, loop method itself is far less computing time efficient than the R built-in function.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=.9\textwidth]{time_4000_iteration.png}
+ \caption{Comparison between the 3 function over 4000 iterations}
+\label{courbe2}
+\end{figure}
+
+To test those 3 functions, we will compute Loop method and Built-in function over 4000 iterations and only over 2000 iterations for recursive method to avoid overflow.
+On figure~\ref{courbe2}, we can see again the same ratio (1 to 2) between the two implemented methods. Concerning the computing time reached at 4000 iterations, the difference between the Built-in function and the loop method is striking. Hence, we should rather compute the sum of Log Gamma with the R built in function when n becomes bigger.
+
+\end{document}

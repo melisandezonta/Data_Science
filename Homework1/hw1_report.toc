@@ -1,0 +1,2 @@
+\contentsline {section}{\numberline {1}Get Familiar with R}{2}
+\contentsline {section}{\numberline {2}Compare Results to Built-in R Function}{3}
